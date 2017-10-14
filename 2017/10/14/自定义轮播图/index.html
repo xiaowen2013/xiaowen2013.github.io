@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="android," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="这是一篇老文章啦，15年在做 Android 的时候写在为知笔记上的，现在创建了新的 blog ，翻出来看看，顺便重新写下，哈哈 这个 ViewPager 的轮播现在网上应该有很多的开源的，应该很好找。本篇文章的思路如下：   创建一个 AutoPlayViewPager 的类来继承自 ViewPager，在 AutoPlayViewPager 的内部实现轮播的任务，其实挺好理解的，就是在内部实现">
+<meta name="keywords" content="android">
+<meta property="og:type" content="article">
+<meta property="og:title" content="自定义轮播图">
+<meta property="og:url" content="http://yoursite.com/2017/10/14/自定义轮播图/index.html">
+<meta property="og:site_name" content="小温的博客">
+<meta property="og:description" content="这是一篇老文章啦，15年在做 Android 的时候写在为知笔记上的，现在创建了新的 blog ，翻出来看看，顺便重新写下，哈哈 这个 ViewPager 的轮播现在网上应该有很多的开源的，应该很好找。本篇文章的思路如下：   创建一个 AutoPlayViewPager 的类来继承自 ViewPager，在 AutoPlayViewPager 的内部实现轮播的任务，其实挺好理解的，就是在内部实现">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-10-14T08:39:21.769Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="自定义轮播图">
+<meta name="twitter:description" content="这是一篇老文章啦，15年在做 Android 的时候写在为知笔记上的，现在创建了新的 blog ，翻出来看看，顺便重新写下，哈哈 这个 ViewPager 的轮播现在网上应该有很多的开源的，应该很好找。本篇文章的思路如下：   创建一个 AutoPlayViewPager 的类来继承自 ViewPager，在 AutoPlayViewPager 的内部实现轮播的任务，其实挺好理解的，就是在内部实现">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/10/14/自定义轮播图/"/>
+
+
+
+
+
+  <title>自定义轮播图 | 小温的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">小温的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Study and make progress step by step.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/14/自定义轮播图/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="小温">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1712311/5c9a7ec7-e300-45d9-8b90-6f438ffde6f6.jpg?imageMogr2/auto-orient/strip|imageView2/1/w/240/h/240">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小温的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">自定义轮播图</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-14T15:55:15+08:00">
+                2017-10-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>这是一篇老文章啦，15年在做 Android 的时候写在为知笔记上的，现在创建了新的 blog ，翻出来看看，顺便重新写下，哈哈</p>
+<p>这个 ViewPager 的轮播现在网上应该有很多的开源的，应该很好找。本篇文章的思路如下：</p>
+<blockquote>
+<ol>
+<li>创建一个 AutoPlayViewPager 的类来继承自 ViewPager，在 AutoPlayViewPager 的内部实现轮播的任务，其实挺好理解的，就是在内部实现一个任务调度，这个任务的调度主要控制着这个 ViewPager 的轮询方向啊，时间的自动滑动啊以及控制轮询的开始和结束等</li>
+<li>创建一个 adapter 继承 PagerAdapter ，做一些公共的事物</li>
+<li>轮播图的使用步骤</li>
+</ol>
+</blockquote>
+<a id="more"></a>
+<h2 id="自定义AutoPlayViewPager"><a href="#自定义AutoPlayViewPager" class="headerlink" title="自定义AutoPlayViewPager"></a>自定义AutoPlayViewPager</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div></pre></td><td class="code"><pre><div class="line">package com.xiaowen.hfy.widget;</div><div class="line">import android.content.Context;</div><div class="line">import android.support.v4.view.PagerAdapter;</div><div class="line">import android.support.v4.view.ViewPager;</div><div class="line">import android.util.AttributeSet;</div><div class="line">/**</div><div class="line"> * @author xiaowen</div><div class="line"> * @time 2016/9/26 9:37</div><div class="line"> * @explain TODO</div><div class="line"> */</div><div class="line">public class AutoPlayViewPager extends ViewPager &#123;</div><div class="line">    /**</div><div class="line">     * 播放时间</div><div class="line">     */</div><div class="line">    private int mShowTime = 3 * 1000;</div><div class="line">    /**</div><div class="line">     * 播放的方向</div><div class="line">     */</div><div class="line">    private Direction mDirection = Direction.LEFT;</div><div class="line">    public AutoPlayViewPager(Context context) &#123;</div><div class="line">        super(context);</div><div class="line">    &#125;</div><div class="line">    public AutoPlayViewPager(Context context, AttributeSet attrs) &#123;</div><div class="line">        super(context, attrs);</div><div class="line">    &#125;</div><div class="line">    /**</div><div class="line">     * 调度</div><div class="line">     */</div><div class="line">    private Runnable mPlay = new Runnable() &#123;</div><div class="line">        @Override</div><div class="line">        public void run() &#123;</div><div class="line">            play(mDirection);</div><div class="line">        &#125;</div><div class="line">    &#125;;</div><div class="line">    @Override</div><div class="line">    protected void onFinishInflate() &#123;</div><div class="line">        super.onFinishInflate();</div><div class="line">        addOnPageChangeListener(new OnPageChangeListener() &#123;</div><div class="line">            @Override</div><div class="line">            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) &#123;</div><div class="line">            &#125;</div><div class="line">            @Override</div><div class="line">            public void onPageSelected(int position) &#123;</div><div class="line">            &#125;</div><div class="line">            @Override</div><div class="line">            public void onPageScrollStateChanged(int state) &#123;</div><div class="line">                if(state == SCROLL_STATE_IDLE)&#123;</div><div class="line">                    start();</div><div class="line">                &#125;else if(state == SCROLL_STATE_DRAGGING)&#123;</div><div class="line">                    stop();</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;);</div><div class="line">    &#125;</div><div class="line">    /**</div><div class="line">     * 设置播放时间，默认为3秒</div><div class="line">     *</div><div class="line">     * @param showTimeMillis 单位：毫秒</div><div class="line">     */</div><div class="line">    public void setShowTime(int showTimeMillis) &#123;</div><div class="line">        this.mShowTime = showTimeMillis;</div><div class="line">    &#125;</div><div class="line">    /**</div><div class="line">     * 设置播放的方向，默认为向左</div><div class="line">     *</div><div class="line">     * @param direction</div><div class="line">     */</div><div class="line">    public void setDirection(Direction direction) &#123;</div><div class="line">        this.mDirection = direction;</div><div class="line">    &#125;</div><div class="line">    public enum Direction &#123;</div><div class="line">        /**</div><div class="line">         * 向左行动，播放的是右边的</div><div class="line">         */</div><div class="line">        LEFT,</div><div class="line">        /**</div><div class="line">         * 向右行动，播放的是左边的</div><div class="line">         */</div><div class="line">        RIGHT</div><div class="line">    &#125;</div><div class="line">    /**</div><div class="line">     * 开始轮播</div><div class="line">     */</div><div class="line">    public void start() &#123;</div><div class="line">        stop();</div><div class="line">        postDelayed(mPlay, mShowTime);</div><div class="line">    &#125;</div><div class="line">    /**</div><div class="line">     * 结束轮播</div><div class="line">     */</div><div class="line">    public void stop() &#123;</div><div class="line">        removeCallbacks(mPlay);</div><div class="line">    &#125;</div><div class="line">    /**</div><div class="line">     * 下一个</div><div class="line">     */</div><div class="line">    public void next() &#123;</div><div class="line">        play(mDirection);</div><div class="line">    &#125;</div><div class="line">    /**</div><div class="line">     * 上一个</div><div class="line">     */</div><div class="line">    public void previous() &#123;</div><div class="line">        if(mDirection == Direction.LEFT)&#123;</div><div class="line">            play(Direction.LEFT);</div><div class="line">        &#125;else if(mDirection == Direction.RIGHT)&#123;</div><div class="line">            play(Direction.RIGHT);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    /**</div><div class="line">     * 执行播放</div><div class="line">     *</div><div class="line">     * @param direction 播放上一个</div><div class="line">     */</div><div class="line">    private synchronized void play(Direction direction) &#123;</div><div class="line">        PagerAdapter adapter = getAdapter();</div><div class="line">        if (adapter != null) &#123;</div><div class="line">            int count = adapter.getCount();</div><div class="line">            int currentItem = getCurrentItem();</div><div class="line">            switch (direction) &#123;</div><div class="line">                case LEFT:</div><div class="line">                    currentItem++;</div><div class="line">                    if (currentItem &gt; count) &#123;</div><div class="line">                        currentItem = 0;</div><div class="line">                    &#125;</div><div class="line">                    break;</div><div class="line">                case RIGHT:</div><div class="line">                    currentItem--;</div><div class="line">                    if (currentItem &lt; 0) &#123;</div><div class="line">                        currentItem = count;</div><div class="line">                    &#125;</div><div class="line">                    break;</div><div class="line">            &#125;</div><div class="line">            setCurrentItem(currentItem);</div><div class="line">        &#125;</div><div class="line">        start();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="Adapter的继承"><a href="#Adapter的继承" class="headerlink" title="Adapter的继承"></a>Adapter的继承</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div></pre></td><td class="code"><pre><div class="line">package com.xiaowen.hfy.adapter;</div><div class="line">import android.content.Context;</div><div class="line">import android.support.v4.view.PagerAdapter;</div><div class="line">import android.view.View;</div><div class="line">import android.view.ViewGroup;</div><div class="line">import android.widget.ImageView;</div><div class="line">import com.bumptech.glide.Glide;</div><div class="line">import com.xiaowen.hfy.R;</div><div class="line">import com.xiaowen.hfy.bean.HomeBean;</div><div class="line">import java.util.List;</div><div class="line">/**</div><div class="line"> * @author xiaowen</div><div class="line"> * @time 2016/7/29 15:19</div><div class="line"> * @explain 主页图片的Adapter</div><div class="line"> */</div><div class="line">public class HHeaderPagerAdapter extends PagerAdapter &#123;</div><div class="line">    private Context mContext;</div><div class="line">    private List&lt;HomeBean.ResponseBean.BannerBean&gt; mStringList;</div><div class="line">    public HHeaderPagerAdapter(Context context) &#123;</div><div class="line">        this.mContext = context;</div><div class="line">    &#125;</div><div class="line">    public void addApaterSource(List&lt;HomeBean.ResponseBean.BannerBean&gt; data) &#123;</div><div class="line">        this.mStringList = data;</div><div class="line">    &#125;</div><div class="line">    @Override</div><div class="line">    public int getCount() &#123;</div><div class="line">        return Integer.MAX_VALUE;</div><div class="line">    &#125;</div><div class="line">    @Override</div><div class="line">    public boolean isViewFromObject(View view, Object object) &#123;</div><div class="line">        return view == object;</div><div class="line">    &#125;</div><div class="line">    @Override</div><div class="line">    public Object instantiateItem(ViewGroup container, int position) &#123;</div><div class="line">        position = position % mStringList.size();</div><div class="line">        ImageView imageView = new ImageView(mContext);</div><div class="line">        imageView.setScaleType(ImageView.ScaleType.FIT_XY);</div><div class="line">        HomeBean.ResponseBean.BannerBean bannerBean = mStringList.get(position);</div><div class="line">        String imgurl = bannerBean.getImgurl();</div><div class="line">        Glide.with(mContext)</div><div class="line">                .load(imgurl)</div><div class="line">                .centerCrop()</div><div class="line">                .placeholder(R.mipmap.ic_launcher)</div><div class="line">                .crossFade()</div><div class="line">                .into(imageView);</div><div class="line">        container.addView(imageView);</div><div class="line">        return imageView;</div><div class="line">    &#125;</div><div class="line">    @Override</div><div class="line">    public void destroyItem(ViewGroup container, int position, Object object) &#123;</div><div class="line">        container.removeView((View) object);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="使用方法："><a href="#使用方法：" class="headerlink" title="使用方法："></a>使用方法：</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">initNewsData(banner);</div><div class="line">initializeViews();</div></pre></td></tr></table></figure>
+<h3 id="初始化："><a href="#初始化：" class="headerlink" title="初始化："></a>初始化：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line">    * 初始化数据</div><div class="line">    */</div><div class="line">   private void initNewsData(List&lt;HomeBean.ResponseBean.BannerBean&gt; banner) &#123;</div><div class="line">       mBannerBeanList = banner;</div><div class="line">       // 多少个轮播广告就多少个点dot</div><div class="line">       mLlVpPoint.removeAllViews(); // ViewPager点的容器</div><div class="line">       for (int i = 0; i &lt; banner.size(); i++) &#123;</div><div class="line">           View view = new View(mContext);</div><div class="line">           LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(15, 15);</div><div class="line">           if (i != 0) &#123;//第一个点不需要左边距</div><div class="line">               params.leftMargin = 9;</div><div class="line">           &#125;</div><div class="line">           view.setLayoutParams(params);</div><div class="line">           view.setBackgroundResource(R.drawable.advertise_dot_selector);</div><div class="line">           mLlVpPoint.addView(view);</div><div class="line">       &#125;</div><div class="line">       updateDot();</div><div class="line">   &#125;</div><div class="line">   /**</div><div class="line">    * 更新dot</div><div class="line">    */</div><div class="line">   private void updateDot() &#123;</div><div class="line">       try &#123;</div><div class="line">           int currentPage = mViewPager.getCurrentItem() % mBannerBeanList.size();</div><div class="line">           for (int i = 0; i &lt; mLlVpPoint.getChildCount(); i++) &#123;</div><div class="line">               //设置setEnabled为true的话 在选择器里面就会对应的使用白色颜色</div><div class="line">               mLlVpPoint.getChildAt(i).setEnabled(i == currentPage);</div><div class="line">           &#125;</div><div class="line">       &#125; catch (Exception e) &#123;</div><div class="line">       &#125;</div><div class="line">   &#125;</div><div class="line">   /**</div><div class="line">    * 初始化控件</div><div class="line">    */</div><div class="line">   private void initializeViews() &#123;</div><div class="line">       /** 广告轮播 **/</div><div class="line">       mHeaderVpAdapter = new HHeaderPagerAdapter(getActivity());</div><div class="line">       mHeaderVpAdapter.addApaterSource(mBannerBeanList);</div><div class="line">       mViewPager.setAdapter(mHeaderVpAdapter);</div><div class="line">       mViewPager.start();</div><div class="line">   &#125;</div></pre></td></tr></table></figure>
+<h3 id="设置选中监听："><a href="#设置选中监听：" class="headerlink" title="设置选中监听："></a>设置选中监听：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">mViewPager.setOnPageChangeListener(this);</div><div class="line"></div><div class="line">@Override</div><div class="line">   public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) &#123;</div><div class="line">       updateDot();</div><div class="line">   &#125;</div><div class="line">   @Override</div><div class="line">   public void onPageSelected(int position) &#123;</div><div class="line">   &#125;</div><div class="line">   @Override</div><div class="line">   public void onPageScrollStateChanged(int state) &#123;</div><div class="line">       try &#123;</div><div class="line">           if(state == ViewPager.SCROLL_STATE_IDLE)&#123;</div><div class="line">               mViewPager.start();</div><div class="line">           &#125;else if(state == ViewPager.SCROLL_STATE_DRAGGING)&#123;</div><div class="line">               mViewPager.stop();</div><div class="line">           &#125;</div><div class="line">       &#125; catch (Exception e) &#123;</div><div class="line">           e.printStackTrace();</div><div class="line">       &#125;</div><div class="line">   &#125;</div></pre></td></tr></table></figure>
+<p>点的布局：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">advertise_dot_selector：</div><div class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</div><div class="line">&lt;selector xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot; &gt;</div><div class="line">   &lt;item android:state_enabled=&quot;true&quot; android:drawable=&quot;@drawable/advertise_dot_focus&quot;&gt;&lt;/item&gt;</div><div class="line">&lt;item android:drawable=&quot;@drawable/advertise_dot_unfocus&quot;&gt;&lt;/item&gt;</div><div class="line">&lt;/selector&gt;</div><div class="line"></div><div class="line"></div><div class="line">advertise_dot_focus：</div><div class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</div><div class="line">&lt;shape xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot; android:shape=&quot;oval&quot;&gt;</div><div class="line">    &lt;solid android:color=&quot;#ffffff&quot;/&gt;</div><div class="line">&lt;/shape&gt;</div><div class="line"></div><div class="line"></div><div class="line">advertise_dot_unfocus：</div><div class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</div><div class="line">&lt;shape xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot; android:shape=&quot;oval&quot;&gt;</div><div class="line">    &lt;solid android:color=&quot;#aa000000&quot;/&gt;</div><div class="line">&lt;/shape&gt;</div></pre></td></tr></table></figure>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/android/" rel="tag"># android</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/10/14/NotificationCompat的使用/" rel="next" title="NotificationCompat 的使用（锁屏通知栏显示）">
+                <i class="fa fa-chevron-left"></i> NotificationCompat 的使用（锁屏通知栏显示）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="http://upload.jianshu.io/users/upload_avatars/1712311/5c9a7ec7-e300-45d9-8b90-6f438ffde6f6.jpg?imageMogr2/auto-orient/strip|imageView2/1/w/240/h/240"
+                alt="小温" />
+            
+              <p class="site-author-name" itemprop="name">小温</p>
+              <p class="site-description motion-element" itemprop="description">爱生活，爱代码</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/xiaowen2013" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://www.jianshu.com/u/115c5194a12d" target="_blank" title="JianShu">
+                    
+                      <i class="fa fa-fw fa-globe"></i>JianShu</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#自定义AutoPlayViewPager"><span class="nav-number">1.</span> <span class="nav-text">自定义AutoPlayViewPager</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Adapter的继承"><span class="nav-number">2.</span> <span class="nav-text">Adapter的继承</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用方法："><span class="nav-number">3.</span> <span class="nav-text">使用方法：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#初始化："><span class="nav-number">3.1.</span> <span class="nav-text">初始化：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设置选中监听："><span class="nav-number">3.2.</span> <span class="nav-text">设置选中监听：</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">小温</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="android," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="这是一篇老文章啦，15年在做 Android 的时候写在为知笔记上的，现在创建了新的 blog ，翻出来看看，顺便重新写下，哈哈 你还在用第三方的框架实现聊天和消息推送？快快试试吧 Socket.IO（官网）介绍是一个跨平台的聊天框架，可以实现 web 端和移动端的实时聊天，简单说就是用来做聊天和消息推送的。最初以为项目做消息推送会直接使用第三方的，比如小米、极光啥的，但是，架构师说我们不用第三方">
+<meta name="keywords" content="android">
+<meta property="og:type" content="article">
+<meta property="og:title" content="用Socket.io打造你的聊天和消息推送">
+<meta property="og:url" content="http://yoursite.com/2017/10/14/Socket_io的使用方式/index.html">
+<meta property="og:site_name" content="小温的博客">
+<meta property="og:description" content="这是一篇老文章啦，15年在做 Android 的时候写在为知笔记上的，现在创建了新的 blog ，翻出来看看，顺便重新写下，哈哈 你还在用第三方的框架实现聊天和消息推送？快快试试吧 Socket.IO（官网）介绍是一个跨平台的聊天框架，可以实现 web 端和移动端的实时聊天，简单说就是用来做聊天和消息推送的。最初以为项目做消息推送会直接使用第三方的，比如小米、极光啥的，但是，架构师说我们不用第三方">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1712311-b323b98dea84d7df.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1712311-32541a922488bab2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1712311-5787bbdc0072e193.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1712311-c0cd59f2e9dd0bc9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1712311-14ed61c4c4e70711.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2017-10-14T08:38:01.778Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="用Socket.io打造你的聊天和消息推送">
+<meta name="twitter:description" content="这是一篇老文章啦，15年在做 Android 的时候写在为知笔记上的，现在创建了新的 blog ，翻出来看看，顺便重新写下，哈哈 你还在用第三方的框架实现聊天和消息推送？快快试试吧 Socket.IO（官网）介绍是一个跨平台的聊天框架，可以实现 web 端和移动端的实时聊天，简单说就是用来做聊天和消息推送的。最初以为项目做消息推送会直接使用第三方的，比如小米、极光啥的，但是，架构师说我们不用第三方">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/1712311-b323b98dea84d7df.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/10/14/Socket_io的使用方式/"/>
+
+
+
+
+
+  <title>用Socket.io打造你的聊天和消息推送 | 小温的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">小温的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Study and make progress step by step.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/14/Socket_io的使用方式/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="小温">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1712311/5c9a7ec7-e300-45d9-8b90-6f438ffde6f6.jpg?imageMogr2/auto-orient/strip|imageView2/1/w/240/h/240">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小温的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">用Socket.io打造你的聊天和消息推送</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-14T10:21:24+08:00">
+                2017-10-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>这是一篇老文章啦，15年在做 Android 的时候写在为知笔记上的，现在创建了新的 blog ，翻出来看看，顺便重新写下，哈哈</p>
+<p>你还在用第三方的框架实现聊天和消息推送？快快试试吧</p>
+<h2 id="Socket-IO（官网）介绍"><a href="#Socket-IO（官网）介绍" class="headerlink" title="Socket.IO（官网）介绍"></a>Socket.IO（<a href="http://socket.io/" target="_blank" rel="external">官网</a>）介绍</h2><p>是一个跨平台的聊天框架，可以实现 web 端和移动端的实时聊天，简单说就是用来做聊天和消息推送的。最初以为项目做消息推送会直接使用第三方的，比如小米、极光啥的，但是，架构师说我们不用第三方的，自己要搭建消息推送，Socket.io技术很成熟了。所以就这样开始了Socket.io的学习之路。第一次接触Socket.io以为很难做，因为不了解，加上能找的资源有限（上网查找的都是英文资料，有关于Android端的Socke.io更是少之又少，除非你去<a href="http://stackoverflow.com/" target="_blank" rel="external">stackoverflow</a>里面去找，英语还得好），所以写篇文章记录下实现该功能流程以及遇到的问题。<br><a href="http://socket.io/blog/native-socket-io-and-android/" target="_blank" rel="external">官方Demo</a>，<a href="https://github.com/socketio/socket.io-client-java" target="_blank" rel="external">Github的Demo</a>，这两个 demo 都是一个聊天室，可以在里面聊天,刚开始弄这个的时候发现有好多哥们在那里，还找几个一起在做聊天功能的小伙伴，快快下载试试吧。</p>
+<a id="more"></a>
+<h3 id="本文不说服务端的搭建和web端的实现，只是来说说-Android-端如何使用Socket-io实现消息推送功能。"><a href="#本文不说服务端的搭建和web端的实现，只是来说说-Android-端如何使用Socket-io实现消息推送功能。" class="headerlink" title="本文不说服务端的搭建和web端的实现，只是来说说 Android 端如何使用Socket.io实现消息推送功能。"></a>本文不说服务端的搭建和web端的实现，只是来说说 Android 端如何使用Socket.io实现消息推送功能。</h3><h2 id="使用方式如下："><a href="#使用方式如下：" class="headerlink" title="使用方式如下："></a>使用方式如下：</h2><h3 id="（1）导包"><a href="#（1）导包" class="headerlink" title="（1）导包"></a>（1）导包</h3><p><code>Android Studio</code> 导包，一共有两种情况（PS： <code>Eclipse</code> 用户也不要哭，下面会教你怎样获取到   <code>JAR</code> ） </p>
+<ol>
+<li>第一种情况  <code>compile &#39;com.github.nkzawa:socket.io-client:0.3.0&#39;</code></li>
+<li><p>第二种情况</p>
+<pre><code>compile (&apos;io.socket:socket.io-client:0.7.0&apos;) {
+  // excluding org.json which is provided by Android
+  exclude group: &apos;org.json&apos;, module: &apos;json&apos;
+}
+</code></pre></li>
+</ol>
+<p>注意：两个包的区别，如果你的项目没有用到 <code>Https</code> ,那么你可以使用两个当中的一个。如果有用到 <code>Https</code> ，那么你就要用二个包，不然你会连接不上 <code>Https</code> 的，具体的连接方式，以下会介绍。</p>
+<p>第一种情况的导包获取到的 <code>JAR</code> 形式</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1712311-b323b98dea84d7df.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>第二种情况的导包获取到的 <code>JAR</code> 形式</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1712311-32541a922488bab2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p><strong><em>PS</em></strong>：  <code>Android Studio</code> 用户直接跳过（如果你想看看你的Studio下载的 <code>JAR</code> 放在那里也可以看看）。<code>Eclipse</code> 用户获取 <code>Jar</code>，如果你会去远程仓库下载 <code>Jar</code>，那么你就去吧，也就是几个 <code>JAR</code> 而已，不然的话你还是得借助 <code>Android Studio</code> 来获取 <code>Jar</code>。</p>
+<blockquote>
+<p>用Studio导入包后找到你的 <code>External Libraries</code> ,选中你的 JAR ，如 <code>engine.io-client-0.7.0</code> 点击右键，点击 <code>Library Properties</code> ,会弹出一个对话框，Copy 这个URL，打开<code>我的电脑</code>，粘贴到导航栏点击确定就可以看到你的 <code>JAR</code>了，但是，这个 <code>JAR</code> 是一个资源文件的 <code>JAR</code> ,里面有源码的，我们不需要这个，点击back后退，一般会有三个文件夹，其中的一个就是你需要的 <code>JAR</code>了。流程图如下：</p>
+</blockquote>
+<p><img src="http://upload-images.jianshu.io/upload_images/1712311-5787bbdc0072e193.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""><br><img src="http://upload-images.jianshu.io/upload_images/1712311-c0cd59f2e9dd0bc9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""><br><img src="http://upload-images.jianshu.io/upload_images/1712311-14ed61c4c4e70711.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<h3 id="（2）代码使用"><a href="#（2）代码使用" class="headerlink" title="（2）代码使用"></a>（2）代码使用</h3><p>导完包剩下的就是代码的使用了。由于 <code>Socket.io</code> 封装得很好，所以我们能用到的类和方法不多，也就几个而已。</p>
+<ul>
+<li>获取 <code>Socket</code> 和设置 url ： <code>mSocket = IO.socket( &quot;http://192.168.205.125:10443&quot; );</code> </li>
+<li>连接 <code>mSocket.mSocket.connect();</code>。</li>
+<li>发送消息 <code>mSocket.emit( &quot;newMessage&quot;, data );</code>，这里需要注意的是: data 是 <code>JSONObject</code> 的类。</li>
+<li>消息监听 <code>mSocket.on( Socket.EVENT_CONNECT, onConnect );// 连接成功</code></li>
+<li>断开连接 <code>mSocket.disconnect();</code>。</li>
+<li>断开消息监听 <code>mSocket.off( Socket.EVENT_CONNECT, onConnect );</code></li>
+</ul>
+<p>就是这么几个方法就可以实现消息推送或者实现聊天了。由于本文主要是实现消息推送的功能，所以把主要的代码放在了 <code>Service</code>，顺便把流程写一下，方便初学者学习。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div><div class="line">169</div><div class="line">170</div><div class="line">171</div><div class="line">172</div></pre></td><td class="code"><pre><div class="line">import android.app.Service;</div><div class="line">import android.content.Intent;</div><div class="line">import android.os.IBinder;</div><div class="line">import android.support.annotation.Nullable;</div><div class="line">import android.util.Log;</div><div class="line"></div><div class="line">import org.json.JSONException;</div><div class="line">import org.json.JSONObject;</div><div class="line"></div><div class="line">import java.net.URISyntaxException;</div><div class="line">import java.security.KeyManagementException;</div><div class="line">import java.security.NoSuchAlgorithmException;</div><div class="line">import java.security.cert.CertificateException;</div><div class="line">import java.security.cert.X509Certificate;</div><div class="line"></div><div class="line">import javax.net.ssl.HostnameVerifier;</div><div class="line">import javax.net.ssl.SSLContext;</div><div class="line">import javax.net.ssl.SSLSession;</div><div class="line">import javax.net.ssl.TrustManager;</div><div class="line">import javax.net.ssl.X509TrustManager;</div><div class="line"></div><div class="line">import io.socket.client.IO;</div><div class="line">import io.socket.client.Socket;</div><div class="line">import io.socket.emitter.Emitter;</div><div class="line"></div><div class="line">public class MessagePushService extends Service &#123;</div><div class="line">    </div><div class="line">    private static final String TAG = MessagePushService.class.getSimpleName();</div><div class="line">    </div><div class="line">    private Socket mSocket;</div><div class="line">    </div><div class="line">    private boolean isConnected;</div><div class="line">    </div><div class="line">    /**</div><div class="line">     * 初始化Socket,Https的连接方式</div><div class="line">     */</div><div class="line">    private void initSocketHttps() &#123;</div><div class="line">        SSLContext sc = null;</div><div class="line">        TrustManager[] trustCerts = new TrustManager[] &#123; new X509TrustManager() &#123;</div><div class="line">            </div><div class="line">            @Override</div><div class="line">            public X509Certificate[] getAcceptedIssuers() &#123;</div><div class="line">                return null;</div><div class="line">            &#125;</div><div class="line">            </div><div class="line">            @Override</div><div class="line">            public void checkServerTrusted( X509Certificate[] chain, String authType )</div><div class="line">                throws CertificateException &#123;</div><div class="line">            &#125;</div><div class="line">            </div><div class="line">            @Override</div><div class="line">            public void checkClientTrusted( X509Certificate[] chain, String authType )</div><div class="line">                throws CertificateException &#123;</div><div class="line">                </div><div class="line">            &#125;</div><div class="line">        &#125; &#125;;</div><div class="line">        try &#123;</div><div class="line">            sc = SSLContext.getInstance( &quot;TLS&quot; );</div><div class="line">            sc.init( null, trustCerts, null );</div><div class="line">            IO.Options opts = new IO.Options();</div><div class="line">            opts.sslContext = sc;</div><div class="line">            opts.hostnameVerifier = new HostnameVerifier() &#123;</div><div class="line">                @Override</div><div class="line">                public boolean verify( String s, SSLSession sslSession ) &#123;</div><div class="line">                    return true;</div><div class="line">                &#125;</div><div class="line">            &#125;;</div><div class="line">            mSocket = IO.socket( &quot;https://192.168.205.125:10443&quot;, opts );</div><div class="line">        &#125; catch ( NoSuchAlgorithmException e ) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125; catch ( KeyManagementException e ) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125; catch ( URISyntaxException e ) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    /**</div><div class="line">     * 初始化Socket,Http的连接方式</div><div class="line">     */</div><div class="line">    private void initSocketHttp() &#123;</div><div class="line">        try &#123;</div><div class="line">            mSocket = IO.socket( &quot;http://192.168.205.125:10443&quot; ); // 初始化Socket</div><div class="line">        &#125; catch ( URISyntaxException e ) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    private void connectSocket() &#123;</div><div class="line">        try &#123;</div><div class="line">            mSocket.connect();</div><div class="line">            JSONObject jsonObject = new JSONObject();</div><div class="line">            jsonObject.put( &quot;userName&quot;, &quot;小王&quot; ); // 这里一般是设置登录名</div><div class="line">            mSocket.emit( &quot;loginName&quot;, jsonObject ); // 发送登录人</div><div class="line">        &#125; catch ( JSONException e ) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        mSocket.on( Socket.EVENT_CONNECT, onConnect );// 连接成功</div><div class="line">        mSocket.on( Socket.EVENT_DISCONNECT, onDisconnect );// 断开连接</div><div class="line">        mSocket.on( Socket.EVENT_CONNECT_ERROR, onConnectError );// 连接异常</div><div class="line">        mSocket.on( Socket.EVENT_CONNECT_TIMEOUT, onConnectTimeoutError );// 连接超时</div><div class="line">        mSocket.on( &quot;newMessage&quot;, onConnectMsg );// 监听消息事件回调</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    private void disConnectSocket() &#123;</div><div class="line">        mSocket.disconnect();</div><div class="line">        </div><div class="line">        mSocket.off( Socket.EVENT_CONNECT, onConnect );// 连接成功</div><div class="line">        mSocket.off( Socket.EVENT_DISCONNECT, onDisconnect );// 断开连接</div><div class="line">        mSocket.off( Socket.EVENT_CONNECT_ERROR, onConnectError );// 连接异常</div><div class="line">        mSocket.off( Socket.EVENT_CONNECT_TIMEOUT, onConnectTimeoutError );// 连接超时</div><div class="line">        mSocket.off( &quot;newMessage&quot;, onConnectMsg );// 监听消息事件回调</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    private Emitter.Listener onConnectMsg = new Emitter.Listener() &#123;</div><div class="line">        @Override</div><div class="line">        public void call( final Object... args ) &#123;</div><div class="line">            // 在这里处理你的消息</div><div class="line">            Log.e( TAG, &quot;服务器返回来的消息 : &quot; + args[0] );</div><div class="line">        &#125;</div><div class="line">    &#125;;</div><div class="line">    </div><div class="line">    /**</div><div class="line">     * 实现消息回调接口</div><div class="line">     */</div><div class="line">    private Emitter.Listener onConnect = new Emitter.Listener() &#123;</div><div class="line">        @Override</div><div class="line">        public void call( final Object... args ) &#123;</div><div class="line">            Log.e( TAG, &quot;连接成功 &quot; + args[0] );</div><div class="line">            if (!isConnected) &#123; // 如果已经断开，重新发送</div><div class="line">                try &#123;</div><div class="line">                    JSONObject jsonObject = new JSONObject();</div><div class="line">                    jsonObject.put( &quot;userName&quot;, &quot;小王&quot; ); // 这里一般是设置登录名</div><div class="line">                    mSocket.emit( &quot;loginName&quot;, jsonObject ); // 发送登录人</div><div class="line">                &#125; catch ( JSONException e ) &#123;</div><div class="line">                    e.printStackTrace();</div><div class="line">                &#125;</div><div class="line">                isConnected = true;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;;</div><div class="line">    </div><div class="line">    private Emitter.Listener onDisconnect = new Emitter.Listener() &#123;</div><div class="line">        @Override</div><div class="line">        public void call( Object... args ) &#123;</div><div class="line">            Log.e( TAG, &quot;断开连接 &quot; + args[0] );</div><div class="line">            isConnected = false;</div><div class="line">        &#125;</div><div class="line">    &#125;;</div><div class="line">    </div><div class="line">    private Emitter.Listener onConnectError = new Emitter.Listener() &#123;</div><div class="line">        @Override</div><div class="line">        public void call( final Object... args ) &#123;</div><div class="line">            Log.e( TAG, &quot;连接 失败&quot; + args[0] );</div><div class="line">        &#125;</div><div class="line">    &#125;;</div><div class="line">    </div><div class="line">    private Emitter.Listener onConnectTimeoutError = new Emitter.Listener() &#123;</div><div class="line">        @Override</div><div class="line">        public void call( final Object... args ) &#123;</div><div class="line">            Log.e( TAG, &quot;连接 超时&quot; + args[0] );</div><div class="line">            </div><div class="line">        &#125;</div><div class="line">    &#125;;</div><div class="line">    </div><div class="line">    @Nullable</div><div class="line">    @Override</div><div class="line">    public IBinder onBind( Intent intent ) &#123;</div><div class="line">        return null;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>就这样完成了一个消息推送，不需要集成什么东西，也不用受制于人。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>刚开始做这个的时候找不到各种 JAR （项目还是在使用Eclipse开发中，所以还是需要去找到 JAR），那会自己才倒腾 Android Studio 没多久，把 Demo 下载下来运行没问题，然后就去找 这个资源的 JAR，准备集成到 项目里面去，一开始以为只要 <code>engine.io-client JAR 和 socket.io-client JAR</code> ，结果就报错了，然后不断的查资料找包（这时候还不知道 Android Studio 已经把JAR 下载到电脑了），最后才知道 Android Studio 下载的JAR在哪里（这才有了前面的找JAR），等到所有的JAR找到后，集成到了项目里面去，最后还是不断的报 <code>NoClassDefFoundError</code> ，把这些JAR全部放到 Android Studio 集成运行却没有问题，这才发现是我的 Eclipse 问题，等找到这些原因，时间已经过去两天了，悲剧呀，然后快速的集成到项目，最终运行一切Ok啦！但是，如果你觉得故事就这样没了，那就太没意思了，这个时候公司的接口全部转成 <code>https</code> ，悲剧呀，项目运行不起来了。花时间找源码，看看怎样实现，最终在<a href="http://stackoverflow.com/questions/16183753/android-socket-io-websocket-transport-does-not-works-in-ssl/37311623#37311623" title="stackoverflow" target="_blank" rel="external">stackoverflow</a>找到了关于加载证书的方式，但是翻源码的时候却发现没有这个 <code>opts.hostnameVerifier</code> 属性，再一次悲剧（这个时候，我用的是上面的第一种JAR，也就是官网介绍的： <code>compile &#39;com.github.nkzawa:socket.io-client:0.3.0&#39;</code>）。这个时候时候发现了 Socket.io 官网的介绍和 Github 的介绍是两种不同的 JAR，最后导入 <code>github</code> 的 <code>JAR</code>（第二种导包方式，所以你还是直接用这个包吧） 确实可以运行了。满满的坑呀！</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/android/" rel="tag"># android</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/10/14/NotificationCompat的使用/" rel="prev" title="NotificationCompat 的使用（锁屏通知栏显示）">
+                NotificationCompat 的使用（锁屏通知栏显示） <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="http://upload.jianshu.io/users/upload_avatars/1712311/5c9a7ec7-e300-45d9-8b90-6f438ffde6f6.jpg?imageMogr2/auto-orient/strip|imageView2/1/w/240/h/240"
+                alt="小温" />
+            
+              <p class="site-author-name" itemprop="name">小温</p>
+              <p class="site-description motion-element" itemprop="description">爱生活，爱代码</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/xiaowen2013" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://www.jianshu.com/u/115c5194a12d" target="_blank" title="JianShu">
+                    
+                      <i class="fa fa-fw fa-globe"></i>JianShu</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Socket-IO（官网）介绍"><span class="nav-number">1.</span> <span class="nav-text">Socket.IO（官网）介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#本文不说服务端的搭建和web端的实现，只是来说说-Android-端如何使用Socket-io实现消息推送功能。"><span class="nav-number">1.1.</span> <span class="nav-text">本文不说服务端的搭建和web端的实现，只是来说说 Android 端如何使用Socket.io实现消息推送功能。</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用方式如下："><span class="nav-number">2.</span> <span class="nav-text">使用方式如下：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#（1）导包"><span class="nav-number">2.1.</span> <span class="nav-text">（1）导包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#（2）代码使用"><span class="nav-number">2.2.</span> <span class="nav-text">（2）代码使用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">小温</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
