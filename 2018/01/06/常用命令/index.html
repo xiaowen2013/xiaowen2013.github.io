@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Linux,git" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="习惯了图形化界面，当初接触命令操作多少还是不习惯。以前做java，android ，无论是git 还是SVN，eclipse 或者Android studio总有插件帮我们完成版本的控制，因此每次只需要点击提交或者同步即可。来到了索喜科技，以前的那些插件可就都用不上，因为代码在远程服务器，编译也得在远程服务器，只能通过ssh登录进行操作了，因此就需要接触命令来进行开发了，还有需要用 vim了。习">
+<meta name="keywords" content="Linux,git">
+<meta property="og:type" content="article">
+<meta property="og:title" content="常用命令">
+<meta property="og:url" content="http://yoursite.com/2018/01/06/常用命令/index.html">
+<meta property="og:site_name" content="小温的博客">
+<meta property="og:description" content="习惯了图形化界面，当初接触命令操作多少还是不习惯。以前做java，android ，无论是git 还是SVN，eclipse 或者Android studio总有插件帮我们完成版本的控制，因此每次只需要点击提交或者同步即可。来到了索喜科技，以前的那些插件可就都用不上，因为代码在远程服务器，编译也得在远程服务器，只能通过ssh登录进行操作了，因此就需要接触命令来进行开发了，还有需要用 vim了。习">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1712311-7f1aff5f22583404.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/584">
+<meta property="og:updated_time" content="2018-01-06T08:03:26.420Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="常用命令">
+<meta name="twitter:description" content="习惯了图形化界面，当初接触命令操作多少还是不习惯。以前做java，android ，无论是git 还是SVN，eclipse 或者Android studio总有插件帮我们完成版本的控制，因此每次只需要点击提交或者同步即可。来到了索喜科技，以前的那些插件可就都用不上，因为代码在远程服务器，编译也得在远程服务器，只能通过ssh登录进行操作了，因此就需要接触命令来进行开发了，还有需要用 vim了。习">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/1712311-7f1aff5f22583404.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/584">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/01/06/常用命令/"/>
+
+
+
+
+
+  <title>常用命令 | 小温的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">小温的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Study and make progress step by step.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/06/常用命令/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="小温">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1712311/5c9a7ec7-e300-45d9-8b90-6f438ffde6f6.jpg?imageMogr2/auto-orient/strip|imageView2/1/w/240/h/240">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小温的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">常用命令</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-06T13:41:06+08:00">
+                2018-01-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><img src="https://upload-images.jianshu.io/upload_images/1712311-7f1aff5f22583404.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/584" alt=""></p>
+<p>习惯了图形化界面，当初接触命令操作多少还是不习惯。<br>以前做java，android ，无论是git 还是SVN，eclipse 或者Android studio总有插件帮我们完成版本的控制，因此每次只需要点击提交或者同步即可。<br>来到了索喜科技，以前的那些插件可就都用不上，因为代码在远程服务器，编译也得在远程服务器，只能通过ssh登录进行操作了，因此就需要接触命令来进行开发了，还有需要用 vim了。<br>习惯了编辑器带来的便利，写代码也就啪啪的没一会功夫就写了一大堆，现在呢，得需要一个个单词手敲，因为没有提示…刚开始的时候心中一万只草泥马奔腾而过，什么鬼，这效率我需要多久才能上手。。。<br>后来才知道，原来是可以用编辑器来干活的，比如 notepad ，vscode ，source insight，现在接触的最多的也就是这三个，做底层开发的视 vim 和 source insight 为神器，就好像做android 开发的对Android studio 或者 java开发对Intelli IDEA 的一样，不过还是有点不同，做底层开发的好像都鄙视上层开发…<br>不扯了，总结下这么久来接触的命令，现在暂时就这些，以后有别的再更新，主要有：</p>
+<blockquote>
+<p>Git<br>Linux<br>Vim</p>
+</blockquote>
+<a id="more"></a>
+<h2 id="Git"><a href="#Git" class="headerlink" title="Git"></a>Git</h2><h3 id="克隆"><a href="#克隆" class="headerlink" title="克隆"></a>克隆</h3><ul>
+<li>git clone xxx —&gt; 克隆项目，xxx 是项目的地址<h3 id="分支"><a href="#分支" class="headerlink" title="分支"></a>分支</h3></li>
+<li>git branch —&gt; 查看当前项目分支</li>
+<li>git checkout -b xxx   —&gt;切换到分支xxx，或者不带 -b，需要注意的是，切换前记得 git pull 先更新本地项目<h3 id="查看当前状态和覆盖本地更新"><a href="#查看当前状态和覆盖本地更新" class="headerlink" title="查看当前状态和覆盖本地更新"></a>查看当前状态和覆盖本地更新</h3></li>
+<li>git status —&gt;查看当前项目的状态，比如修改了那些文件，添加了那些文件，或者已经 commit 没有 push 等</li>
+<li>git status -uno  —&gt; 查看当前 repo 文件的状态，不包含新增的文件</li>
+<li>git pull  —&gt; 更新本地，如果项目里面有多个 repo ，并且是要在根目录更新，请使用 agito pull</li>
+<li>git checkout -f —&gt; 覆盖本地更新</li>
+<li>git checkout -f xxx.file —&gt; 单个文件覆盖更新，只会将xxx.file文件修改的内容全部覆盖掉</li>
+</ul>
+<h3 id="查看修改信息"><a href="#查看修改信息" class="headerlink" title="查看修改信息"></a>查看修改信息</h3><ul>
+<li>git diff —&gt; 查看本地更改的更改的内容，不包含新增的文件，如果要看新增的文件，请使用 git status</li>
+<li>git diff xxx.file —&gt; 查看xxx.file文件的更改内容，可以查看多个文件，文件之间空格隔开<h3 id="生成-patch"><a href="#生成-patch" class="headerlink" title="生成 patch"></a>生成 patch</h3></li>
+<li>git diff –binary &gt;xxx.patch  —&gt; 将本地更改的内容生成xxx.patch文件，不包括新增文件</li>
+<li>git diff –binary HEAD^ &gt;xxx.patch  —&gt; 将上一次提交的内容生成xxx.patch文件。HEAD^^表示上两次，一次类推</li>
+<li>git diff HASH_PREV HASH_CURR &gt; PATCHNAME.patch  —&gt; 生成指定 commit 之间的 patch 命令： HASH_CURR -&gt; 需要生成的commit 号； HASH_PREV –&gt; HASH_CURR 之前的commit 号，比如：git diff ed0ede9ab46ade1494fd2b7a5ab7882c8cbab0e6 a1d1f770eed6a7980aafd228f9c3a76a23023fc5 &gt; PATCHNAME.patch</li>
+<li>git format-patch -1 <r1> … <rn>   —&gt;打patch包含提交人的相关信息,多个commit 号之间用这样的方式，单个则直接带commit 号即可<h3 id="打-patch"><a href="#打-patch" class="headerlink" title="打 patch"></a>打 patch</h3></rn></r1></li>
+<li>patch -p1 &lt; ~/xxxx.patch   —&gt; 在当前目录打入 xxxx.patch,”~” 表示系统根目录，”.” 表示当前目录</li>
+<li>git am ~/xxxx.patch  —&gt; 打入包含提交人信息的patch ，跟上面的 git format-patch 对应<h3 id="提交"><a href="#提交" class="headerlink" title="提交"></a>提交</h3></li>
+<li>git add xxx.file  —&gt; 添加 xxx.file 关联，多个文件直接空格后面携带，如果是本地所有的文件都要提交，可以执行 git add . ，即后面带一个 “.”，表示关联当前所有未添加关联的文件</li>
+<li>git commit -a  —&gt; 提交，并且填写提交信息</li>
+<li>git push —&gt; push 上服务器<h3 id="查看-log"><a href="#查看-log" class="headerlink" title="查看 log"></a>查看 log</h3></li>
+<li>git log  —&gt; 查看 log</li>
+<li>git log xxx.file —&gt; 查看 xxx.file 的 log</li>
+<li>git log -p —&gt; 查看 log 和提交的内容</li>
+<li>git log -p xxx.file —&gt; 查看 xxx.file 的log 和提交的内容<h3 id="版本回退"><a href="#版本回退" class="headerlink" title="版本回退"></a>版本回退</h3></li>
+<li>git reset + commit   —&gt; 已经执行 git commit ，不想执行 git push 提交 ，可以回退到上一级版本，那么你改过的东西就会重新恢复为未提交，或者执行命令 ： git reset –hard HEAD^</li>
+<li>git reset –hard HEAD^  —&gt; 版本回退1级(回退一级则是一个^号)，或者执行 git reset + commit</li>
+</ul>
+<h3 id="注意："><a href="#注意：" class="headerlink" title="注意："></a>注意：</h3><ul>
+<li>上述的一些命令可以携带后缀，比如带 “.” 表示当前目录，带文件等</li>
+</ul>
+<h2 id="Linux"><a href="#Linux" class="headerlink" title="Linux"></a>Linux</h2><p>下面的命令操作过程中如果提示没有权限，则在执行命令的前面添加 <code>sudo</code></p>
+<h3 id="文件操作"><a href="#文件操作" class="headerlink" title="文件操作"></a>文件操作</h3><ul>
+<li><p>查看文件列表 ls</p>
+<blockquote>
+<p>ls —&gt; 列出当前目录下文件和文件夹，不包括”.” 开头的文件和文件夹<br>la —&gt; 列出当前目录下的所有文件和文件夹，包含 “.” 开头的文件和文件夹<br>ll —&gt; 列出文件或者文件夹的所有信息，比如权限，文件所有者，文件大小，时间等<br>pwd  —&gt; 显示当前目录的绝对路径</p>
+</blockquote>
+</li>
+<li><p>文件或者文件夹创建以及改名、复制和删除</p>
+<blockquote>
+<p>mkdir xxx  —&gt; 创建xxx文件夹<br>touch xxx.txt  —&gt; 创建 xxx.txt 文件<br>mv xxx vvvv  —&gt; 将文件夹 xxx 重命名为 vvvv ，该命令也可以操作文件<br>mv xxx /home/share xxx —&gt; 将 xxx 移动到 /home/share  ，该命令也可以操作文件<br>rm xxx.txt  —&gt; 删除 xxx.txt 文件<br>rm -rf xxx  —&gt; 将 xxx 目录底下的内容全部删除， -r 递归， -f 强行删除，忽略不存在的文件，系统不再提示<br>cp /home/share/xxx.txt .  —&gt; 将 /home/share/xxx.txt 拷贝到当前目录<br>cp /home/share/xxx.txt /home/wxf/vvv.txt  —&gt; 将 /home/share/xxx.txt 拷贝到 /home/wxf/，并将其命名为 vvv.txt<br>拷贝文件夹则在上述两条命令cp 的后面添加参数 <code>-R</code> ，其余的跟上述的一样，比如将share文件夹拷贝到当前目录：cp -R /home/share/ .</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="搜索与查找"><a href="#搜索与查找" class="headerlink" title="搜索与查找"></a>搜索与查找</h3><ul>
+<li><p>搜索字符串</p>
+<blockquote>
+<p>grep -nsFR “xxx” <em>  —&gt; 在当前目录下搜索字符 xxx<br>grep -nsFR “xxx” </em> –color=auto —&gt; 在当前目录下搜索字符 xxx，并将匹配的关键字添加颜色</p>
+</blockquote>
+</li>
+<li><p>查找文件</p>
+<blockquote>
+<p>find . -name “new_main.c”  —&gt; 在当前目录下查找new_main.c文件，也可以使用通配符 “<em>“进行模糊搜索，比如： find . -name “new_main.</em>“ , find . -name “new*.c” 等等</p>
+<h3 id="权限管理"><a href="#权限管理" class="headerlink" title="权限管理"></a>权限管理</h3></blockquote>
+</li>
+<li>sudo chown -R wxfc:wxfc commit      —&gt; 使用户wxfc或者组wxfc拥有 commit 的读写权限<h3 id="网络连接"><a href="#网络连接" class="headerlink" title="网络连接"></a>网络连接</h3></li>
+<li>ssh user@host  —&gt; 录远程主机host，比如 ssh wxfc@172.22.26.201 ，然后输入密码即可</li>
+<li>ssh -p 66 user@host  —&gt; 更改登录的端口，因为默认端口是 ： 22</li>
+<li>ifconfig  —&gt; 查看Linux设备的IP地址</li>
+</ul>
+<h2 id="vim"><a href="#vim" class="headerlink" title="vim"></a>vim</h2><ul>
+<li>vim fileName  —&gt; 打开文件 fileName</li>
+<li>搜索<blockquote>
+<p>/text  —&gt; 搜索text，按 n 键切换选中<br>？text  —&gt; 反向搜索<br>shift + <em>  —&gt; 光标点中某个单词，按住 shift + </em> ，即可选中单词，然后按住 shift ，不断的点击 <em> 键即可切换当前的搜索，</em> 键 也可以替换成 # 键</p>
+</blockquote>
+</li>
+<li>u —&gt; 撤销修改,相当于 window 的 ctrl + z </li>
+<li>i  —&gt; 在当前位置插入</li>
+<li>复制粘贴<blockquote>
+<p>yy  —&gt; 复制当前行<br>p  —&gt; 在当前行的下一行粘贴，前提是执行了 yy</p>
+</blockquote>
+</li>
+<li>删除<blockquote>
+<p>dd  —&gt; 删除当前行<br>x  —&gt; 删除当前字符</p>
+</blockquote>
+</li>
+<li>退出<blockquote>
+<p>Esc + : + q!  —&gt; 退出不保存修改<br>Esc + : + wq  —&gt; 退出保存修改</p>
+</blockquote>
+</li>
+</ul>
+<p>未完待续…</p>
+
+      
+    </div>
+    
+    
+    
+	
+	 
+	
+    
+
+    
+
+    
+	
+	<div>
+	  
+		<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+	  
+	</div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Linux/" rel="tag"><i class="fa fa-tag"></i> Linux</a>
+          
+            <a href="/tags/git/" rel="tag"><i class="fa fa-tag"></i> git</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/10/14/hexo搭建博客教程/" rel="next" title="hexo搭建博客教程">
+                <i class="fa fa-chevron-left"></i> hexo搭建博客教程
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="http://upload.jianshu.io/users/upload_avatars/1712311/5c9a7ec7-e300-45d9-8b90-6f438ffde6f6.jpg?imageMogr2/auto-orient/strip|imageView2/1/w/240/h/240"
+                alt="小温" />
+            
+              <p class="site-author-name" itemprop="name">小温</p>
+              <p class="site-description motion-element" itemprop="description">爱生活，爱代码</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/xiaowen2013" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://www.jianshu.com/u/115c5194a12d" target="_blank" title="JianShu">
+                    
+                      <i class="fa fa-fw fa-globe"></i>JianShu</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Git"><span class="nav-number">1.</span> <span class="nav-text">Git</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#克隆"><span class="nav-number">1.1.</span> <span class="nav-text">克隆</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分支"><span class="nav-number">1.2.</span> <span class="nav-text">分支</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查看当前状态和覆盖本地更新"><span class="nav-number">1.3.</span> <span class="nav-text">查看当前状态和覆盖本地更新</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查看修改信息"><span class="nav-number">1.4.</span> <span class="nav-text">查看修改信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#生成-patch"><span class="nav-number">1.5.</span> <span class="nav-text">生成 patch</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#打-patch"><span class="nav-number">1.6.</span> <span class="nav-text">打 patch</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#提交"><span class="nav-number">1.7.</span> <span class="nav-text">提交</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查看-log"><span class="nav-number">1.8.</span> <span class="nav-text">查看 log</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#版本回退"><span class="nav-number">1.9.</span> <span class="nav-text">版本回退</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#注意："><span class="nav-number">1.10.</span> <span class="nav-text">注意：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Linux"><span class="nav-number">2.</span> <span class="nav-text">Linux</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#文件操作"><span class="nav-number">2.1.</span> <span class="nav-text">文件操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#搜索与查找"><span class="nav-number">2.2.</span> <span class="nav-text">搜索与查找</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#权限管理"><span class="nav-number">2.3.</span> <span class="nav-text">权限管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#网络连接"><span class="nav-number">2.4.</span> <span class="nav-text">网络连接</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#vim"><span class="nav-number">3.</span> <span class="nav-text">vim</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">小温</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
